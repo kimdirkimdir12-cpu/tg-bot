@@ -4,7 +4,7 @@ import fs from "fs";
 const BOT_TOKEN = "8575973881:AAFfDeDvGEUBZKSiKk4uqBxS-KIZ__hM3gI";
 const ADMIN_ID = 5728779626;
 
-const bot = new Telegraf(BOT_TOKEN);   // <-- SHU QATOR YO‘Q EDI
+const bot = new Telegraf(BOT_TOKEN);
 
 const DB = "./users.json";
 if (!fs.existsSync(DB)) fs.writeFileSync(DB, "{}");
@@ -16,12 +16,16 @@ function saveUsers(data) {
   fs.writeFileSync(DB, JSON.stringify(data, null, 2));
 }
 
+const mainMenu = Markup.keyboard([
+  ["📚 Sessiya testlari"],
+  ["ℹ️ Ma’lumot"]
+]).resize();
+
 bot.start(ctx => {
   ctx.reply(
     "Assalomu alaykum!\n\n📚 Sessiya uchun tayyorgarlik testlar botiga xush kelibsiz.\n\nTelefon raqamingizni yuboring.",
     Markup.keyboard([
-      Markup.button.contactRequest("📞 Telefon raqamni yuborish"),
-      ["📚 Sessiya testlari"]
+      [Markup.button.contactRequest("📞 Telefon raqamni yuborish")]
     ]).resize()
   );
 });
@@ -38,15 +42,8 @@ bot.on("contact", ctx => {
   };
 
   saveUsers(users);
-  ctx.reply("✅ Ro‘yxatdan o‘tdingiz!", mainMenu());
+  ctx.reply("✅ Ro‘yxatdan o‘tdingiz!", mainMenu);
 });
-
-function mainMenu() {
-  return Markup.keyboard([
-    ["📚 Sessiya testlari"],
-    ["ℹ️ Ma’lumot"]
-  ]).resize();
-}
 
 bot.hears("📚 Sessiya testlari", ctx => {
   ctx.reply(
