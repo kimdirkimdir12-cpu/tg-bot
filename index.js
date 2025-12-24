@@ -4,6 +4,8 @@ import fs from "fs";
 const BOT_TOKEN = "8575973881:AAFfDeDvGEUBZKSiKk4uqBxS-KIZ__hM3gI";
 const ADMIN_ID = 5728779626;
 
+const bot = new Telegraf(BOT_TOKEN);   // <-- SHU QATOR YO‘Q EDI
+
 const DB = "./users.json";
 if (!fs.existsSync(DB)) fs.writeFileSync(DB, "{}");
 
@@ -16,13 +18,11 @@ function saveUsers(data) {
 
 bot.start(ctx => {
   ctx.reply(
-    "Assalomu alaykum!\n\n📚 *Sessiya uchun tayyorgarlik testlar* botiga xush kelibsiz.\n\nRo‘yxatdan o‘tish uchun telefon raqamingizni yuboring.",
-    { parse_mode: "Markdown",
-      ...Markup.keyboard([
-        Markup.button.contactRequest("📞 Telefon raqamni yuborish"),
-        ["📚 Sessiya testlari"]
-      ]).resize()
-    }
+    "Assalomu alaykum!\n\n📚 Sessiya uchun tayyorgarlik testlar botiga xush kelibsiz.\n\nTelefon raqamingizni yuboring.",
+    Markup.keyboard([
+      Markup.button.contactRequest("📞 Telefon raqamni yuborish"),
+      ["📚 Sessiya testlari"]
+    ]).resize()
   );
 });
 
@@ -38,7 +38,6 @@ bot.on("contact", ctx => {
   };
 
   saveUsers(users);
-
   ctx.reply("✅ Ro‘yxatdan o‘tdingiz!", mainMenu());
 });
 
@@ -51,21 +50,14 @@ function mainMenu() {
 
 bot.hears("📚 Sessiya testlari", ctx => {
   ctx.reply(
-    "📚 *Sessiya uchun tayyorgarlik testlar*\n\n" +
-    "• Real sessiya savollariga o‘xshash testlar\n" +
-    "• Natijani darhol ko‘rish\n" +
-    "• Reyting jadvali\n" +
-    "• O‘qituvchi nazoratida\n\n" +
-    "📌 Testlar yaqin orada ishga tushadi!",
-    { parse_mode: "Markdown" }
+    "📚 Sessiya uchun tayyorgarlik testlar\n\n" +
+    "Real savollar, tezkor natija, reyting va nazorat tizimi.\n\n" +
+    "Testlar tez orada ishga tushadi."
   );
 });
 
 bot.hears("ℹ️ Ma’lumot", ctx => {
-  ctx.reply(
-    "Bu bot orqali siz sessiyaga tayyorgarlik testlarida qatnashishingiz mumkin.\n" +
-    "Ro‘yxatdan o‘ting va testlarni yeching."
-  );
+  ctx.reply("Bu bot orqali sessiyaga tayyorgarlik testlaridan foydalanishingiz mumkin.");
 });
 
 bot.command("admin", ctx => {
